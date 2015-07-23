@@ -68,7 +68,7 @@ for link in links:
     links_csv = soup_csv.find_all('a')
     for link_csv in links_csv:
         if 'CSV' in link_csv.text:
-            url = link_csv['href']
+            url = 'http://www.dudley.gov.uk' + link_csv['href']
             csvfile = link_csv.text.strip()
             csvMth = csvfile.split('Spend')[0].strip()[:3]
             csvYr = csvfile.split('Spend')[-1].split(')')[0].split('(')[-1]
