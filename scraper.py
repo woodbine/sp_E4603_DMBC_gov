@@ -57,14 +57,14 @@ def convert_mth_strings ( mth_string ):
     return mth_string
 # pull down the content from the webpage
 html = urllib2.urlopen(url)
-soup = BeautifulSoup(html)
+soup = BeautifulSoup(html, 'lxml')
 # find all entries with the required class
 block = soup.find('li', attrs = {'class':'snv-current depth4'})
 links = block.findAll('li', 'snv-child depth5')
 for link in links:
     url_csv = 'http://www.dudley.gov.uk' +link.a['href']
     html_csv = urllib2.urlopen(url_csv)
-    soup_csv = BeautifulSoup(html_csv)
+    soup_csv = BeautifulSoup(html_csv, 'lxml')
     links_csv = soup_csv.find_all('a')
     for link_csv in links_csv:
         if 'CSV' in link_csv.text:
