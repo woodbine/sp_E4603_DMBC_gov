@@ -86,9 +86,6 @@ def convert_mth_strings ( mth_string ):
 
 entity_id = "E4603_DMBC_gov"
 url = 'http://www.dudley.gov.uk/resident/your-council/local-transparency/council-expenditure-over-500'
-proxy = urllib2.ProxyHandler({'http': '176.227.202.26:9574'})
-opener = urllib2.build_opener(proxy)
-urllib2.install_opener(opener)
 errors = 0
 data = []
 
@@ -109,11 +106,13 @@ for link in links:
     soup_csv = BeautifulSoup(html_csv, 'lxml')
     links_csv = soup_csv.find_all('a')
     for link_csv in links_csv:
-        if 'CSV' in link_csv.text:
+        if 'CSV' in link_csv.text and '[csv'  in link_csv.text:
             url = 'http://www.dudley.gov.uk' + link_csv['href']
             csvfile = link_csv.text.strip()
             csvMth = csvfile.split('Spend')[0].strip()[:3]
             csvYr = csvfile.split('Spend')[-1].split(')')[0].split('(')[-1]
+            if 'CSV' in csvYr:
+                csvYr = csvfile.split('Spend')[-1].strip()[:4]
             csvMth = convert_mth_strings(csvMth.upper())
             data.append([csvYr, csvMth, url])
 links_csv = soup.find_all('a')
@@ -123,6 +122,8 @@ for link_csv in links_csv:
         csvfile = link_csv.text.strip()
         csvMth = csvfile.split('Spend')[0].strip()[:3]
         csvYr = csvfile.split('Spend')[-1].split(')')[0].split('(')[-1]
+        if 'CSV' in csvYr:
+            csvYr = csvfile.split('Spend')[-1].strip()[:4]
         csvMth = convert_mth_strings(csvMth.upper())
         data.append([csvYr, csvMth, url])
 
